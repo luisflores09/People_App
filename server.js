@@ -15,6 +15,8 @@ const mongoose = require('mongoose');
 // import middlware
 const cors = require("cors");
 const morgan = require("morgan");
+// import People Controller
+const peopleController = require('./controllers/people');
 
 ///////////////////////////////
 // DATABASE CONNECTION
@@ -23,9 +25,10 @@ const morgan = require("morgan");
 mongoose.connect(DATABASE_URL);
 // Connection Events
 const db = mongoose.connection;
-  db.on("open", () => console.log("You are connected to MongoDB"));
-  db.on("close", () => console.log("You are disconnected from MongoDB"));
-  db.on("error", (error) => console.log(error));
+
+db.on("open", () => console.log("You are connected to MongoDB"));
+db.on("close", () => console.log("You are disconnected from MongoDB"));
+db.on("error", (error) => console.log(error));
 
 
 ///////////////////////////////
@@ -42,6 +45,8 @@ app.use(express.json()); // parse json bodies
 app.get("/", (req, res) => {
   res.send("hello world");
 });
+
+app.use('/people', peopleController);
 
 ///////////////////////////////
 // LISTENER
