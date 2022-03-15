@@ -12,6 +12,9 @@ const express = require("express");
 const app = express();
 // import mongoose
 const mongoose = require('mongoose');
+// import middlware
+const cors = require("cors");
+const morgan = require("morgan");
 
 ///////////////////////////////
 // DATABASE CONNECTION
@@ -19,13 +22,20 @@ const mongoose = require('mongoose');
 // Establish Connection
 mongoose.connect(DATABASE_URL);
 // Connection Events
-mongoose.connection
-  .on("open", () => console.log("You are connected to MongoDB"))
-  .on("close", () => console.log("You are disconnected from MongoDB"))
-  .on("error", (error) => console.log(error))
+const db = mongoose.connection;
+  db.on("open", () => console.log("You are connected to MongoDB"));
+  db.on("close", () => console.log("You are disconnected from MongoDB"));
+  db.on("error", (error) => console.log(error));
 
 
 ///////////////////////////////
+// MiddleWare
+////////////////////////////////
+app.use(cors()); // to prevent cors errors, open access to all origins
+app.use(morgan("dev")); // logging
+app.use(express.json()); // parse json bodies
+
+  ///////////////////////////////
 // ROUTES
 ////////////////////////////////
 // create a test route
